@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChatApp</title>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+    <script>
+      var app = angular.module("app", []);
+      var socket = io();
+
+      app.controller("chatController", function($scope, $http) {
+        $scope.sendMessage = function(msg) {
+          socket.emit("newMessage", msg);
+        };
+
+        socket.on("connect", function(messages) {
+            $http({method: "GET", url: "/messages"})
+            .then( (data) => {
+                console.log(data);
+                $scope.allMessage = data.data;
+            })
+        });
+
+        socket.on("updateMessage", function(messages) {
+          $scope.$apply(function() {
+            $scope.allMessage = messages;
+          });
+        });
+      });
+    </script>
+  </head>
+  <body ng-app="app">
+    <h1>Real time Chat App</h1>
+
+    <div ng-controller="chatController">
+      <input type="text" placeholder="Write something" ng-model="msg" />
+      <button ng-click="sendMessage(msg)">Send</button>
+
+      <ul>
+        <li ng-repeat="message in allMessage">{{message}}</li>
+        
+      </ul>
+    </div>
+  </body>
+</html>
