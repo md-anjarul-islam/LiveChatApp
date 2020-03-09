@@ -1,4 +1,4 @@
-app.controller("chatController", function($scope, $http) {
+app.controller("chatController", function($scope, $rootScope, $http) {
   var socket = io();
 
   $scope.login = function() {
@@ -15,6 +15,13 @@ app.controller("chatController", function($scope, $http) {
     })
       .then(response => {
         $scope.user = response.data;
+
+        $rootScope.link1 = "#!/";
+        $rootScope.link2 = "#!/chatroom";
+        $rootScope.link3 = "#!/logout";
+        $rootScope.linkName1 = "Home";
+        $rootScope.linkName2 = "Chat Room";
+        $rootScope.linkName3 = "Log Out";
       })
       .catch(err => {
         $scope.errorMessage = err.message;
