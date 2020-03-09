@@ -1,11 +1,11 @@
-app.controller('initializer', function($scope){
+app.controller('initializer', function($scope, $rootScope){
     $scope.init = function(){
-        $scope.link1 = "#!/";
-        $scope.link2 = "#!/login";
-        $scope.link3 = "#!/chatroom";
+        $rootScope.link1 = "#!/";
+        $rootScope.link2 = "#!/login";
+        $rootScope.link3 = "#!/chatroom";
         
-        $scope.linkName1 = "Home";
-        $scope.linkName2 = "Login";
-        $scope.linkName3 = "Chat Room";
+        $rootScope.linkName1 = "Home";
+        $rootScope.linkName2 = "Login";
+        $rootScope.linkName3 = "Chat Room";
     }
 })
