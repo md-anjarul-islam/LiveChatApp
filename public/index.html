@@ -18,7 +18,8 @@
     <script src="./javascript/controllers/initializer.js"></script>
   </head>
 
-  <body ng-app="app" ng-controller="initializer" ng-init="init()">
+  <body ng-app="app">
+    <div ng-controller="initializer" ng-init="init()"></div>
     <div class="container-fluid h-100">
       <div class="navbar">
         <ul class="navbar-nav">
@@ -33,7 +34,6 @@
           </li>
         </ul>
       </div>
-
       <div class="row justify-content-center h-100 mt-4">
         <ng-view></ng-view>
       </div>
