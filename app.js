@@ -4,8 +4,8 @@ const bodyParser = require("body-parser");
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const path = require("path");
-const userHandler = require('./model/user');
-const messageHandler = require('./model/message');
+const userHandler = require("./model/user");
+const messageHandler = require("./model/message");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -26,23 +26,30 @@ app.post("/api/messages", (req, res) => {
 });
 
 app.post("/api/register", async function(req, res) {
-  let  user = await userHandler.createUser(req.body.user, req.body.socketId);
-  let allUser = await userHandler.findAllUser();  
+  let newUser = await userHandler.createUser(req.body.user, req.body.socketId);
+  let allUser = await userHandler.findAllUser();
   allUser.forEach(user => {
-      io.to(user.socketId).emit("updateUser", user);
+    io.to(user.socketId).emit("updateUser", newUser);
   });
 
-  res.json(user);
+  res.json(newUser);
 });
 
 app.post("/api/login", async function(req, res) {
-  let  loggedUser = await userHandler.login(req.body.user, req.body.socketId);
-  let allUser = await userHandler.findAllUser();
-  allUser.forEach(user => {
-      io.to(user.socketId).emit("updateActiveUser", loggedUser);
-  });
+  let loggedUser = await userHandler.login(req.body.user, req.body.socketId);
+  loggedUser = await userHandler.findUser(req.body.user);
 
-  res.json(loggedUser);
+  if (loggedUser) {
+    let allUser = await userHandler.findAllUser();
+    allUser.forEach(user => {
+    console.log("emitting to ",user.name);    
+
+      io.to(user.socketId).emit("updateUser", allUser);
+    });
+    res.json(loggedUser);
+  } else {
+    res.status(401).json(loggedUser);
+  }
 });
 
 app.get("api/users", async function(req, res) {
@@ -54,15 +61,12 @@ io.on("connection", socket => {
   console.log("a user connected", socket.id);
 
   socket.on("newMessage", function(message) {
-    /// recieved a new message
     messages.push(message);
-    console.log(messages);
     socket.emit("updateMessage", messages); // save in database and then send back all message
   });
   socket.on("sentMessage", function(data) {});
 
   socket.on("disconnect", () => {
-    // users.filter( (user) => user.socketId !== socket.id )
     console.log("a user disconnected");
   });
 });
