@@ -1,21 +1,41 @@
 app.controller("chatController", function($scope, $rootScope, $http) {
   var socket = io();
 
-  $scope.login = function() {
+  $scope.register = function(){
     let user = {
       name: $scope.name,
+      password: $scope.password
+    }
+    let socketId = socket.id;
+    let sendData = {user, socketId};
+
+    $http({
+      method: "POST",
+      url: "api/register",
+      data: JSON.stringify(sendData)
+    }).then( (response) =>{
+      console.log(response.data);
+      $scope.userInfo = response.data;
+    }).catch(err=>console.log(err));
+  }
+
+  $scope.login = function() {
+    let user = {
+      _id: 21637996,
+      name: $scope.name,
       password: $scope.password,
-      socketId: socket.id
     };
+    let socketId = socket.id;
+    let sendData = {user, socketId};
 
     $http({
       method: "POST",
       url: "/api/login",
-      data: JSON.stringify(user)
+      data: JSON.stringify(sendData)
     })
       .then(response => {
         $scope.user = response.data;
-
+        console.log(response.data);
         $rootScope.link1 = "#!/";
         $rootScope.link2 = "#!/chatroom";
         $rootScope.link3 = "#!/logout";
