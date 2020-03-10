@@ -1,6 +1,7 @@
 <div class="card shadow-lg m-4">
   <div class="card-header">
     <h5>Login</h5>
+    <p> {{errorMessage}} </p>
   </div>
   <div class="card-body">
     <form>
@@ -8,10 +9,12 @@
         <input type="text" class="form-control" placeholder="Enter your name" ng-model="name">
       </div>
       <div class="form-group">
+        <input type="email" class="form-control" placeholder="Enter email address" ng-model="email">
+      </div>
+      <div class="form-group">
         <input type="password" class="form-control" placeholder="Enter password" ng-model="password">
       </div>
       <button class="btn btn-primary btn-block" ng-click="login()"> Login </button>
-      {{errorMessage}}
     </form>
   </div>
 </div>
