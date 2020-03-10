@@ -2,12 +2,16 @@ var app = angular.module("app", ["ngRoute"]);
 
 app.config( function($routeProvider){
     $routeProvider
+        .when('/register', {
+            templateUrl: 'views/registerView.html',
+            controller: 'chatController'
+        })
         .when('/login', {
-            templateUrl: 'html/loginView.html',
+            templateUrl: 'views/loginView.html',
             controller: 'chatController'
         })
         .when('/chatroom', {
-            templateUrl: 'html/chatView.html',
+            templateUrl: 'views/chatView.html',
             controller: 'chatController'
         })
         .otherwise({
