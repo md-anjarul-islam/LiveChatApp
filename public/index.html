@@ -15,14 +15,16 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="./javascript/app.js"></script>
     <script src="./javascript/controllers/chatController.js"></script>
+    <script src="./javascript/controllers/userController.js"></script>
     <script src="./javascript/controllers/initializer.js"></script>
+    <script src="./javascript/services/userService.js"></script>
   </head>
 
   <body ng-app="app">
     <div ng-controller="initializer" ng-init="init()"></div>
-    <div class="container-fluid h-100">
-      <div class="navbar">
-        <ul class="navbar-nav">
+    <div class="container">
+      <div class="top-bar p-3 m-2 bg-dark">
+        <ul class="nav justify-content-end">
           <li class="nav-item">
             <a class="nav-link" href="{{link1}}"> {{linkName1}} </a>
           </li>
