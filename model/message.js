@@ -1,18 +1,14 @@
 const db = require("../config/db");
 
 const messageSchema = new db.Schema({
-  person1: {
-    _id: String,
-    name: String
-  },
-  person2: {
-    _id: String,
-    name: String
+  users:{
+    _id1 : String,
+    _id2: String
   },
   messages: [
     {
       message: String,
-      from: String,
+      fromUserId: String,        
       time: {
         type: Date,
         default: Date.now
@@ -23,62 +19,76 @@ const messageSchema = new db.Schema({
 
 const Messages = new db.model("Messages", messageSchema);
 
-async function createMessage(user1, user2, msg) {
+async function createMessage(id1, id2, msg) {
   try {
     let messageId = null;
-    if (user1._id < user2._id) messageId = await findMessageId(user1, user2);
-    else messageId = await findMessageId(user2, user1);
+    if (id1 < id2)
+      messageId = await findMessageId(id1, id2);
+    else messageId = await findMessageId(id2, id1);
 
-    let userFrom = user1.name;
+    let userFrom = id1;
 
     if (!messageId) {
       let newMessage = null;
-      if (user1._id < user2._id)
+      if (id1 < id2)
         newMessage = new Messages({
-          person1: user1,
-          person2: user2,
+          users:{
+            _id1: id1,
+            _id2: id2
+          },
+          fromUserId: userFrom,
           messages: []
         });
       else
         newMessage = new Messages({
-          person1: user2,
-          person2: user1,
+          users: {
+            _id1: id2,
+            _id2: id1
+          },
           messages: []
         });
       message = await newMessage.save();
       messageId = message._id;
     }
 
-    return await Messages.updateOne(
+    newMessage = new Messages({messages: [{message: msg, fromUserId: userFrom}]});
+    newMessage = newMessage.messages[0];
+    // delete newMessage._id;
+    console.log(newMessage);
+     await Messages.updateOne(
       { _id: messageId },
-      { $push: { messages: { message: msg, from: userFrom } } }
+      { $push: { messages: newMessage } }
     );
+    return newMessage;
   } catch (err) {
+    console.log(err);
     return err.message;
   }
 }
 
-async function findMessageId(user1, user2) {
+async function findMessageId(id1, id2) {
   try {
-    const message = await Messages.findOne({ person1: user1, person2: user2 });
-    const messageId = message._id;
-    if (messageId) return messageId;
+    const message = await Messages.findOne({ users: {_id1: id1, _id2: id2} });
+    if (message) return message._id;
     else return null;
   } catch (err) {
+    console.log(err);
     return null;
   }
 }
 
-async function getMessage(user1, user2) {
+async function getMessage(id1, id2) {
   try {
-    const messageDetails = await Messages.findOne().or([
-      { person1: user1, person2: user2 },
-      { person1: user2, person2: user1 }
-    ]);
+    let messageDetails = [];
+    if(id1<id2)
+      messageDetails = await Messages.findOne({users: {_id1: id1, _id2: id2}});
+    else
+      messageDetails = await Messages.findOne({users: {_id1: id2, _id2: id1}});
 
     if (messageDetails) return messageDetails.messages;
     else return null;
   } catch (err) {
+    console.log(err);
     return null;
   }
 }
