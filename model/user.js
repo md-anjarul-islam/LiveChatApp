@@ -1,8 +1,8 @@
 const db = require("../config/db");
 
 const userSchema = new db.Schema({
-  _id: Number,
   name: String,
+  email: String,
   password: String,
   socketId: String
 });
@@ -11,7 +11,6 @@ const User = new db.model("Users", userSchema);
 
 async function createUser(aUser, socketId) {
   try {
-    aUser._id = Math.round(Math.random() * 100000000);
     aUser.socketId = socketId;
     const newUser = new User(aUser);
     return await newUser.save();
@@ -23,7 +22,7 @@ async function createUser(aUser, socketId) {
 
 async function login(user, socketId){
   try{
-    return await User.updateOne({_id: user._id}, {$set: {socketId: socketId}});
+    return await User.updateOne(user, {$set: {socketId: socketId}});
   }catch(err){
     console.log(err);
     return null;
