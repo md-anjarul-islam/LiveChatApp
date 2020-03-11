@@ -1,10 +1,15 @@
-app.controller("userController", function(
-  $scope,
-  $rootScope,
-  $location,
-  $http,
-  userService
-) {
+app.controller("userController", function( $scope, $rootScope, $location, $http, userService) {
+
+  var socket = $rootScope.socket;
+  socket.on("updateUser", function(updatedUser) {
+    console.log("updatedUser", updatedUser);
+    $scope.$apply(function() {
+      userService.setAllUser(updatedUser);
+      $scope.allUser = userService.getAllUser();
+      $scope.user = userService.getUser();
+    });
+  });
+  
   $scope.register = function() {
     let user = {
       name: $scope.name,

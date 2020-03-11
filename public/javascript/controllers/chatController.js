@@ -7,6 +7,7 @@ app.controller("chatController", function($scope, $rootScope, $http, $location, 
       userService.allMessage = updatedMessage;
     });
   });
+  $scope.allUser = userService.getAllUser();
 
   socket.on("updateUser", function(updatedUser) {
     console.log("updatedUser", updatedUser);
