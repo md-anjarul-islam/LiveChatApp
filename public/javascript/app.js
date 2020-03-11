@@ -4,11 +4,11 @@ app.config( function($routeProvider){
     $routeProvider
         .when('/register', {
             templateUrl: 'views/registerView.html',
-            controller: 'chatController'
+            controller: 'userController'
         })
         .when('/login', {
             templateUrl: 'views/loginView.html',
-            controller: 'chatController'
+            controller: 'userController'
         })
         .when('/chatroom', {
             templateUrl: 'views/chatView.html',
