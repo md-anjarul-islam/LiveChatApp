@@ -1,10 +1,11 @@
 app.controller("chatController", function($scope, $rootScope, $http, $location, userService) {
   var socket = $rootScope.socket;
- 
+
   socket.on("updateMessage", function(updatedMessage) {
     console.log("updatedMessage", updatedMessage);
     $scope.$apply(function() {
-      userService.allMessage = updatedMessage;
+      userService.setMessages(updatedMessage);
+      $scope.allMessage = userService.getMessages();
     });
   });
   $scope.allUser = userService.getAllUser();
@@ -18,20 +19,50 @@ app.controller("chatController", function($scope, $rootScope, $http, $location, 
     });
   });
 
-  $scope.sendMessage = function() {
-    let messageDetails = {
-      from: $scope.user.name,
-      message: $scope.message,
-      socketId: socket.id
+  $scope.findName = function(userId){
+    if(userId == userService.currentUser._id)
+      return userService.currentUser.name;
+    else
+      return $scope.friend.name;
+  }
+
+  $scope.selectFriend = function(frinedId) {
+    $scope.friend = userService.getUserById(frinedId);
+    let sendData = {
+      id1: userService.currentUser._id,
+      id2: $scope.friend._id        
     };
 
     $http({
       method: "POST",
-      url: "/api/messages",
-      data: messageDetails
+      url: "api/users/message",
+      data: JSON.stringify(sendData)
     })
       .then(response => {
-        $scope.allMessage = response.data;
+        userService.initMessage(response.data);
+        $scope.allMessage = userService.getMessages();
+      })
+      .catch(err => {
+        console.log(err);
+        $scope.messageDetails = [];
+      });
+  };
+
+  $scope.sendMessage = function() {
+    let sendData = {
+      id1: userService.currentUser._id,      
+      id2: $scope.friend._id,        
+      message: $scope.message      
+    };
+
+    $http({
+      method: "POST",
+      url: "/api/users/messages",
+      data: JSON.stringify(sendData)
+    })
+      .then(response => {
+        userService.pushMessage(response.data);
+        $scope.allMessage = userService.getMessages();
       })
       .catch(err => {
         alert(err.message);
