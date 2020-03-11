@@ -1,19 +1,35 @@
-<div class="bg-primary card">
-    <div class="card-header">
-        <h5 style="text-align: center;"> {{user.name}} </h5>
-    </div>
-    <div class="card-body overflow-auto" style="max-height: 400px;">
-        <ul class="list-group">
-            <li class="list-group-item" ng-repeat="messageDetails in allMessage">
+<div style="display: flex; height: 800px;">
+    <div class="card" style="width: 300px; margin:10px; padding:10px; background-color: lightblue;">
+        <div class="card-header">
+            <h5> Registered users </h5>
+        </div>
 
-                {{messageDetails.from}}
-                {{messageDetails.message}}
-
-            </li>
-        </ul>
+        <div class="card-body">
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="user in allUser">
+                    {{user.name}}
+                </li>
+            </ul>
+        </div>
     </div>
-    <div class="card-footer">
-        <input type="text" placeholder="Write something" ng-model="message">
-        <button ng-click="sendMessage()">Send</button>
+
+    <div class="card" style="width: 600px; margin:10px; padding:10px; background-color: lightblue;">
+        <div class="card-header">
+            <h5 style="text-align: center;"> Send to: {{user.name}} </h5>
+        </div>
+        <div class="card-body overflow-auto" style="background-color: whitesmoke">
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="messageDetails in allMessage">
+
+                    {{messageDetails.from}}
+                    {{messageDetails.message}}
+
+                </li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <input type="text" placeholder="Write something" ng-model="message">
+            <button ng-click="sendMessage()">Send</button>
+        </div>
     </div>
 </div>
