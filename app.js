@@ -11,18 +11,31 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/api/messages", (req, res) => {
-  res.json(messages);
+app.post("/api/users/message", async (req, res) => {
+  let id1 = req.body.id1;
+  let id2 = req.body.id2;
+
+  try{
+    const messages = await messageHandler.getMessage(id1, id2);
+    res.json(messages);
+  }catch(err){
+    res.json({message: "Error!"});
+  }
 });
 
-app.post("/api/messages", (req, res) => {
-  const newMessage = req.body;
-  messages.push(newMessage);
-  messages.forEach(message => {
-    if (message.socketId != newMessage.socketId)
-      io.to(message.socketId).emit("updateMessage", messages);
-  });
-  res.json(messages);
+app.post("/api/users/messages", async (req, res) => {
+  let newMessage = req.body.message;
+  let id1 = req.body.id1;
+  let id2 = req.body.id2;
+
+  try{
+    newMessage = await messageHandler.createMessage(id1, id2, newMessage);
+    user2 = await userHandler.findUser({_id: id2});
+    io.to(user2.socketId).emit("updateMessage", newMessage);
+    res.json(newMessage);
+  }catch(err){
+    res.json({message: "Error!"});
+  }
 });
 
 app.post("/api/register", async function(req, res) {
@@ -59,12 +72,6 @@ app.get("api/users", async function(req, res) {
 
 io.on("connection", socket => {
   console.log("a user connected", socket.id);
-
-  socket.on("newMessage", function(message) {
-    messages.push(message);
-    socket.emit("updateMessage", messages); // save in database and then send back all message
-  });
-  socket.on("sentMessage", function(data) {});
 
   socket.on("disconnect", () => {
     console.log("a user disconnected");
