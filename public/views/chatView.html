@@ -19,10 +19,12 @@
         </div>
         <div class="card-body overflow-auto" style="background-color: whitesmoke">
             <ul class="list-group">
-                <li class="list-group-item" ng-repeat="messageDetails in allMessage">
+                <li class="list-group-item" ng-repeat="messageDetails in allMessage track by $index">
 
-                    {{messageDetails.from}}
-                    {{messageDetails.message}}
+                   <pre>from:{{ findName(messageDetails.fromUserId) }}
+                                    {{messageDetails.message}}
+                                    {{messageDetails.time}}
+                                 </pre>
 
                 </li>
             </ul>
