@@ -7,7 +7,7 @@
         <div class="card-body">
             <ul class="list-group">
                 <li class="list-group-item" ng-repeat="user in allUser">
-                    {{user.name}}
+                    <button class="btn btn-block btn-primary" ng-click="selectFriend(user._id);">{{user.name}}</button>
                 </li>
             </ul>
         </div>
@@ -15,7 +15,7 @@
 
     <div class="card" style="width: 600px; margin:10px; padding:10px; background-color: lightblue;">
         <div class="card-header">
-            <h5 style="text-align: center;"> Send to: {{user.name}} </h5>
+            <h5 style="text-align: center;"> Send to: {{friend.name}} </h5>
         </div>
         <div class="card-body overflow-auto" style="background-color: whitesmoke">
             <ul class="list-group">
