@@ -4,7 +4,7 @@ app.controller("chatController", function($scope, $rootScope, $http, $location, 
   socket.on("updateMessage", function(updatedMessage) {
     console.log("updatedMessage", updatedMessage);
     $scope.$apply(function() {
-      userService.setMessages(updatedMessage);
+      userService.pushMessage(updatedMessage);
       $scope.allMessage = userService.getMessages();
     });
   });
@@ -21,7 +21,7 @@ app.controller("chatController", function($scope, $rootScope, $http, $location, 
 
   $scope.findName = function(userId){
     if(userId == userService.currentUser._id)
-      return userService.currentUser.name;
+      return "You";
     else
       return $scope.friend.name;
   }
