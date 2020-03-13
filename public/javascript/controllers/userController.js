@@ -1,4 +1,4 @@
-app.controller("userController", function( $scope, $rootScope, $location, $http, userService) {
+app.controller("userController", function( $scope, $rootScope, $location, $http, userService, $state) {
 
   var socket = $rootScope.socket;
   socket.on("updateUser", function(updatedUser) {
@@ -54,12 +54,10 @@ app.controller("userController", function( $scope, $rootScope, $location, $http,
         console.log(response.data);
         if (response.status == 200) {
           userService.setUser(response.data);
-          $location.path("/chatroom");
-          // $scope.user = userService.get();
-          // console.log(response.data);
-          $rootScope.link1 = "#!/";
-          $rootScope.link2 = "#!/chatroom";
-          $rootScope.link3 = "#!/logout";
+          $state.go('chatroom');
+          $rootScope.link1 = "home";
+          $rootScope.link2 = "chatroom";
+          $rootScope.link3 = "logout";
           $rootScope.linkName1 = "Home";
           $rootScope.linkName2 = "Chat Room";
           $rootScope.linkName3 = "Log Out";
