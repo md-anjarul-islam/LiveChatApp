@@ -1,21 +1,25 @@
-var app = angular.module("app", ["ngRoute"]);
+var app = angular.module("app", ["ui.router"]);
 
-app.config( function($routeProvider){
-    $routeProvider
-        .when('/register', {
+app.config( function($stateProvider, $urlRouterProvider){
+    $stateProvider
+        .state('home', {
+            url: '/',
+            controller: 'userController'
+        })
+        .state('register', {
+            url: '/register',
             templateUrl: 'views/registerView.html',
             controller: 'userController'
         })
-        .when('/login', {
+        .state('login', {
+            url: '/login',
             templateUrl: 'views/loginView.html',
             controller: 'userController'
         })
-        .when('/chatroom', {
+        .state('chatroom', {
+            url: '/chatroom',
             templateUrl: 'views/chatView.html',
             controller: 'chatController'
         })
-        .otherwise({
-            redirectTo: '/',
-            controller: 'chatController'
-        })
+        $urlRouterProvider.otherwise('/')
 })
