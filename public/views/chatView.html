@@ -19,19 +19,32 @@
         </div>
         <div class="card-body overflow-auto" style="background-color: whitesmoke">
             <ul class="list-group">
-                <li class="list-group-item" ng-repeat="messageDetails in allMessage track by $index">
-
-                   <pre>from:{{ findName(messageDetails.fromUserId) }}
-                                    {{messageDetails.message}}
-                                    {{messageDetails.time}}
-                                 </pre>
-
-                </li>
+                <div ng-repeat="messageDetails in allMessage track by $index">
+                    <li ng-if="findName(messageDetails.fromUserId) == 'You'" class="list-group-item case d-flex justify-content-end mb-2" style="background-color: inherit; border-style: none;" >
+                        <div style="border-radius: 40px; width: 400px; height: 80px; background:lightgreen;">
+                            <div class="m-3 p-2" style="text-align: end;">
+                                <strong style="display: block;"> {{messageDetails.message}} </strong> 
+                                <small> {{messageDetails.time}} </small>
+                            </div>
+                        </div>
+                    </li>
+                    
+                    <li ng-if="findName(messageDetails.fromUserId) != 'You'" class="list-group-item case d-flex justify-content-start mb-2" style="background-color: inherit; border-style: none;">
+                        <div style="border-radius: 40px; width: 400px; height: 80px; background: lightcoral;">
+                            <div class="m-3 p-2">
+                                <span style="display: block;"><strong> {{messageDetails.message}} </strong> </span>
+                                <span style="display: inline;"></span><small> {{messageDetails.time}} </small>
+                            </div>
+                        </div>
+                    </li>
+                </div>
             </ul>
         </div>
         <div class="card-footer">
-            <input type="text" placeholder="Write something" ng-model="message">
-            <button ng-click="sendMessage()">Send</button>
+            <form ng-submit="sendMessage()">
+                <input type="text" placeholder="Write something" ng-model="message">
+                <button type="submit">Send</button>
+            </form>
         </div>
     </div>
 </div>
