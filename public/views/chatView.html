@@ -21,7 +21,7 @@
             <ul class="list-group">
                 <div ng-repeat="messageDetails in allMessage track by $index">
                     <li ng-if="findName(messageDetails.fromUserId) == 'You'" class="list-group-item case d-flex justify-content-end mb-2" style="background-color: inherit; border-style: none;" >
-                        <div style="border-radius: 40px; width: 400px; height: 80px; background:lightgreen;">
+                        <div style="border-radius: 40px; width: 300px; height: 80px; background:lightgreen;">
                             <div class="m-3 p-2" style="text-align: end;">
                                 <strong style="display: block;"> {{messageDetails.message}} </strong> 
                                 <small> {{messageDetails.time}} </small>
@@ -30,7 +30,7 @@
                     </li>
                     
                     <li ng-if="findName(messageDetails.fromUserId) != 'You'" class="list-group-item case d-flex justify-content-start mb-2" style="background-color: inherit; border-style: none;">
-                        <div style="border-radius: 40px; width: 400px; height: 80px; background: lightcoral;">
+                        <div style="border-radius: 40px; width: 300px; height: 80px; background: lightcoral;">
                             <div class="m-3 p-2">
                                 <span style="display: block;"><strong> {{messageDetails.message}} </strong> </span>
                                 <span style="display: inline;"></span><small> {{messageDetails.time}} </small>

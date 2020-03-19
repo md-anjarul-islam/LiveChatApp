@@ -1,25 +1,52 @@
-var app = angular.module("app", ["ui.router"]);
+var app = angular.module("app", ["ngRoute"]);
 
-app.config( function($stateProvider, $urlRouterProvider){
-    $stateProvider
-        .state('home', {
-            url: '/',
-            controller: 'userController'
-        })
-        .state('register', {
-            url: '/register',
+app.config( function($routeProvider){
+    window.routes = {
+        "/": {
+            controller: 'userController',
+            requireLogin: false
+        },
+        '/register': {
             templateUrl: 'views/registerView.html',
-            controller: 'userController'
-        })
-        .state('login', {
-            url: '/login',
+            controller: 'userController',
+            requireLogin: false
+        },
+        '/login': {
             templateUrl: 'views/loginView.html',
-            controller: 'userController'
-        })
-        .state('chatroom', {
-            url: '/chatroom',
+            controller: 'userController',
+            requireLogin: false
+        },
+        '/chatroom': {
             templateUrl: 'views/chatView.html',
-            controller: 'chatController'
-        })
-        $urlRouterProvider.otherwise('/')
+            controller: 'chatController',
+            requireLogin: true
+        },
+        '/logout': {
+            template: '<h1>This is Logout page </h1>',
+            controller: 'userController',
+            requireLogin: false
+        }
+    };
+    
+    for(path in window.routes){
+        $routeProvider.when(path, window.routes[path]);
+    }
+
+    $routeProvider.otherwise({
+        redirectTo: '/',
+        controller: 'userController'
+    })
+}).run(function($rootScope, sessionService){
+    $rootScope.$on("$locationChangeStart", 
+    function(event, next, current){
+        for(let route in window.routes){
+            if(next.indexOf(route) !=-1 ){
+                if(window.routes[route].requireLogin && !sessionService.getAuthUser()){
+                    console.log("Requested for authorized route");
+                    event.preventDefault();
+                }
+            }
+        }
+        console.log("event triggered", next, current);
+    });
 })

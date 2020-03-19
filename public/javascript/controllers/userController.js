@@ -1,4 +1,4 @@
-app.controller("userController", function( $scope, $rootScope, $location, $http, userService, $state) {
+app.controller("userController", function( $scope, $rootScope, $location, $http, userService, sessionService) {
 
   var socket = $rootScope.socket;
   socket.on("updateUser", function(updatedUser) {
@@ -54,13 +54,16 @@ app.controller("userController", function( $scope, $rootScope, $location, $http,
         console.log(response.data);
         if (response.status == 200) {
           userService.setUser(response.data);
-          $state.go('chatroom');
-          $rootScope.link1 = "home";
-          $rootScope.link2 = "chatroom";
-          $rootScope.link3 = "logout";
+          sessionService.createSession(response.data._id);
+          $rootScope.currentUser = userService.getUser().name;
+          
+          $rootScope.link1 = "#!/";
+          $rootScope.link2 = "#!/chatroom";
+          $rootScope.link3 = "#!/logout";
           $rootScope.linkName1 = "Home";
           $rootScope.linkName2 = "Chat Room";
           $rootScope.linkName3 = "Log Out";
+          $location.path('/chatroom');
         } else {
           $scope.errorMessage =
             "Some error occurred! the user might not found!";

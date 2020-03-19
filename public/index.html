@@ -12,13 +12,13 @@
     />
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
-    <script src="//unpkg.com/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="./javascript/app.js"></script>
     <script src="./javascript/controllers/chatController.js"></script>
     <script src="./javascript/controllers/userController.js"></script>
     <script src="./javascript/controllers/initializer.js"></script>
     <script src="./javascript/services/userService.js"></script>
+    <script src="./javascript/services/sessionService.js"></script>
   </head>
 
   <body ng-app="app">
@@ -26,19 +26,23 @@
     <div class="container">
       <div class="top-bar p-3 m-2 ">
         <ul class="nav justify-content-end">
-          <li class="nav-item">
-            <a class="nav-link" ui-sref="{{link1}}"> {{linkName1}} </a>
+          <li class="nav-item" ng-if="currentUser">
+            <a class="nav-link" href="#!/profile">Welcome {{currentUser}}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" ui-sref="{{link2}}"> {{linkName2}} </a>
+            <a class="nav-link" href="{{link1}}"> {{linkName1}} </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" ui-sref="{{link3}}"> {{linkName3}} </a>
+            <a class="nav-link" href="{{link2}}"> {{linkName2}} </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{link3}}"> {{linkName3}} </a>
           </li>
         </ul>
       </div>
+
       <div class="row justify-content-center h-100 mt-4">
-        <div ui-view></div>
+        <div ng-view></div>
       </div>
     </div>
 
