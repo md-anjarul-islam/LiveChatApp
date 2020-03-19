@@ -55,6 +55,7 @@ app.controller("chatController", function($scope, $rootScope, $http, $location, 
       message: $scope.message      
     };
 
+    $scope.message = "";
     $http({
       method: "POST",
       url: "/api/users/messages",

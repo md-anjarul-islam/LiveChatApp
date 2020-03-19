@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <title>UI view</title>
+</head>
+
+<body>
+    <div class="container">
+        <div style="display: flex; height: 800px; justify-content: center;">
+            <div class="card" style="width: 300px; margin:10px; padding:10px; background-color: lightblue;">
+                <div class="card-header">
+                    <h5>Registered users</h5>
+                </div>
+
+                <div class="card-body">
+                    <ul class="list-group" style="display: flex;">
+                        <li class="list-group-item"> <button class="btn btn-block btn-primary"> User1  </button></li>
+                        <li class="list-group-item"> <button class="btn btn-block btn-primary"> User2 </button> </li>
+                        <li class="list-group-item"> <button class="btn btn-block btn-primary"> User3 </button> </li>
+                        <li class="list-group-item"> <button class="btn btn-block btn-primary"> User4 </button> </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card" style="width: 600px; margin:10px; padding:10px; background-color: lightblue;">
+                <div class="card-header">
+                    <h5 style="text-align: center;">Send to: Friend</h5>
+                </div>
+                <div class="card-body overflow-auto" style="background-color: whitesmoke">
+                    <ul class="list-group">
+                        <div >
+                            <li class="list-group-item case d-flex justify-content-end mb-2" style="background-color: inherit; border-style: none;">
+                                <div style="border-radius: 40px; width: 400px; height: 80px; background:lightgreen;">
+                                    <div class="m-3">
+                                        <span style="display: block;"><strong> Message Left </strong> </span>
+                                        <span style="display: inline;"></span><small> message time </small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item case d-flex justify-content-start mb-2" style="background-color: inherit; border-style: none;">
+                                <div style="border-radius: 40px; width: 400px; height: 80px; background: lightcoral;">
+                                    <div class="m-3">
+                                        <span style="display: block;"><strong> Message Right </strong> </span>
+                                        <span style="display: inline;"></span><small> message time </small>
+                                    </div>
+                                </div>
+                            </li>
+                        </div>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <form ng-submit="sendMessage()">
+                        <input type="text" placeholder="Write something" ng-model="message" />
+                        <button type="submit">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
