@@ -44,8 +44,8 @@ app.post("/api/register", async function(req, res) {
   allUser.forEach(user => {
     io.to(user.socketId).emit("updateUser", newUser);
   });
-
-  res.json(newUser);
+  let token = newUser.getAuthToken();
+  res.set({"x-token":token}).json(newUser);
 });
 
 app.post("/api/login", async function(req, res) {
