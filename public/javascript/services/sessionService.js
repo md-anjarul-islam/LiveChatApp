@@ -1,17 +1,29 @@
-app.factory('sessionService', function(){
-    var obj = {};
+app.factory("sessionService", function() {
+  var obj = {};
 
-    obj.createSession = function(userId){
-        sessionStorage.setItem('userId', userId);
-    }
+  obj.setAuthToken = function(token) {
+    sessionStorage.setItem("authToken", token);
+  };
 
-    obj.clearSession = function(){
-        sessionStorage.clear();
-    }
+  obj.getAuthToken = function() {
+    return sessionStorage.getItem("authToken");
+  };
 
-    obj.getAuthUser = function(){
-        return sessionStorage.getItem('userId');
-    }
+  obj.clearAuthToken = function() {
+    sessionStorage.removeItem("authToken");
+  };
 
-    return obj;
-})
+  obj.createSession = function(user) {
+    sessionStorage.setItem("user", JSON.stringify(user));
+  };
+
+  obj.clearSession = function() {
+    sessionStorage.removeItem("user");
+  };
+
+  obj.getAuthUser = function() {
+    return JSON.parse(sessionStorage.getItem("user"));
+  };
+
+  return obj;
+});
