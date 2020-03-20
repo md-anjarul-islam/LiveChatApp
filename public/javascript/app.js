@@ -1,4 +1,4 @@
-var app = angular.module("app", ["ngRoute"]);
+var app = angular.module("app", ["ngRoute", "ngCookies"]);
 
 app.config( function($routeProvider){
     window.routes = {
@@ -36,7 +36,8 @@ app.config( function($routeProvider){
         redirectTo: '/',
         controller: 'userController'
     })
-}).run(function($rootScope, sessionService){
+}).run(function($http, $rootScope, sessionService){
+    $http.defaults.headers.common.authtoken = sessionService.getAuthToken();
     $rootScope.$on("$locationChangeStart", 
     function(event, next, current){
         for(let route in window.routes){
