@@ -5,7 +5,8 @@ module.exports = async function(req, res, next) {
   let verifiedToken = userHandler.verifyToken(token);
     
   if (!verifiedToken) res.status(401).json({ message: "Unauthorized Access!" });
-  else 
+  else {
       req.headers.user = verifiedToken;
       next();
+  }
 };
