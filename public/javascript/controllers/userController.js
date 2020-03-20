@@ -1,8 +1,7 @@
-app.controller("userController", function( $scope, $rootScope, $location, $http, userService, sessionService) {
+app.controller("userController", function( $scope, $rootScope, $location, $http, $cookies, userService, sessionService) {
 
   var socket = $rootScope.socket;
   socket.on("updateUser", function(updatedUser) {
-    console.log("updatedUser", updatedUser);
     $scope.$apply(function() {
       userService.setAllUser(updatedUser);
       $scope.allUser = userService.getAllUser();
@@ -54,9 +53,9 @@ app.controller("userController", function( $scope, $rootScope, $location, $http,
         console.log(response.data);
         if (response.status == 200) {
           userService.setUser(response.data);
-          sessionService.createSession(response.data._id);
+          sessionService.createSession(response.data);
+          sessionService.setAuthToken(response.headers()["x-token"]);
           $rootScope.currentUser = userService.getUser().name;
-          
           $rootScope.link1 = "#!/";
           $rootScope.link2 = "#!/chatroom";
           $rootScope.link3 = "#!/logout";
