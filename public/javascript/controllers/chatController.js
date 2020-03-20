@@ -28,16 +28,8 @@ app.controller("chatController", function($scope, $rootScope, $http, $location, 
 
   $scope.selectFriend = function(frinedId) {
     $scope.friend = userService.getUserById(frinedId);
-    let sendData = {
-      id1: userService.currentUser._id,
-      id2: $scope.friend._id        
-    };
-
-    $http({
-      method: "POST",
-      url: "api/users/message",
-      data: JSON.stringify(sendData)
-    })
+    let url = `api/users/${$scope.friend._id}/messages`;
+    $http.get(url)
       .then(response => {
         userService.initMessage(response.data);
         $scope.allMessage = userService.getMessages();
@@ -49,18 +41,10 @@ app.controller("chatController", function($scope, $rootScope, $http, $location, 
   };
 
   $scope.sendMessage = function() {
-    let sendData = {
-      id1: userService.currentUser._id,      
-      id2: $scope.friend._id,        
-      message: $scope.message      
-    };
-
+    let message = $scope.message;
     $scope.message = "";
-    $http({
-      method: "POST",
-      url: "/api/users/messages",
-      data: JSON.stringify(sendData)
-    })
+    let url = `api/users/${$scope.friend._id}/messages`;
+    $http.post(url, JSON.stringify( { message } ))
       .then(response => {
         userService.pushMessage(response.data);
         $scope.allMessage = userService.getMessages();
