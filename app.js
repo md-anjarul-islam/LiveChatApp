@@ -6,15 +6,15 @@ const io = require("socket.io")(server);
 const path = require("path");
 const userHandler = require("./model/user");
 const messageHandler = require("./model/message");
+const authProvider = require('./middleware/auth');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.post("/api/users/message", async (req, res) => {
-  let id1 = req.body.id1;
-  let id2 = req.body.id2;
-
+app.get("/api/users/:userId/messages", authProvider, async (req, res) => {
+  let id1 = req.headers.user._id;
+  let id2 = req.params.userId;
   try{
     const messages = await messageHandler.getMessage(id1, id2);
     res.json(messages);
@@ -23,10 +23,10 @@ app.post("/api/users/message", async (req, res) => {
   }
 });
 
-app.post("/api/users/messages", async (req, res) => {
+app.post("/api/users/:userId/messages", authProvider, async (req, res) => {
   let newMessage = req.body.message;
-  let id1 = req.body.id1;
-  let id2 = req.body.id2;
+  let id1 = req.headers.user._id;
+  let id2 = req.params.userId;
 
   try{
     newMessage = await messageHandler.createMessage(id1, id2, newMessage);
@@ -59,7 +59,8 @@ app.post("/api/login", async function(req, res) {
 
       io.to(user.socketId).emit("updateUser", allUser);
     });
-    res.json(loggedUser);
+    let token = loggedUser.getAuthToken();
+    res.set({"x-token":token}).json(loggedUser);
   } else {
     res.status(401).json(loggedUser);
   }
