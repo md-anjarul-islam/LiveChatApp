@@ -5,7 +5,7 @@ app.controller("chatController", function($scope, $rootScope, $http, sessionServ
   socket.on("updateMessage", function(updatedMessage) {
     console.log("updatedMessage", updatedMessage);
     $scope.$apply(function() {
-      if(updatedMessage.fromUserId == $scope.friend._id){
+      if($scope.friend && $scope.friend._id == updatedMessage.fromUserId){
         userService.pushMessage(updatedMessage);
         $scope.allMessage = userService.getMessages();
       } else{
