@@ -1,7 +1,8 @@
 app.controller('initializer', function($scope, $rootScope, sessionService){
     $scope.init = function(){
         $rootScope.socket = io();
-        $rootScope.currentUser = sessionService.getAuthUser().name;
+        if(sessionService.getAuthUser())
+            $rootScope.currentUser = sessionService.getAuthUser().name;
         $rootScope.link1 = "#!/";
         $rootScope.link2 = "#!/login";
         $rootScope.link3 = "#!/register";
