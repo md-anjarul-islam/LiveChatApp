@@ -1,11 +1,17 @@
-app.controller("chatController", function($scope, $rootScope, $http, $location, userService) {
+app.controller("chatController", function($scope, $rootScope, $http, sessionService, userService) {
   var socket = $rootScope.socket;
-
+  $scope.messageCount = {};
+  
   socket.on("updateMessage", function(updatedMessage) {
     console.log("updatedMessage", updatedMessage);
     $scope.$apply(function() {
-      userService.pushMessage(updatedMessage);
-      $scope.allMessage = userService.getMessages();
+      if(updatedMessage.fromUserId == $scope.friend._id){
+        userService.pushMessage(updatedMessage);
+        $scope.allMessage = userService.getMessages();
+      } else{
+        userService.setMessageCount(updatedMessage.fromUserId);
+        $scope.messageCount[updatedMessage.fromUserId] = userService.getMessageCount(updatedMessage.fromUserId);
+      }
     });
   });
   $scope.allUser = userService.getAllUser();
@@ -29,10 +35,17 @@ app.controller("chatController", function($scope, $rootScope, $http, $location, 
   $scope.selectFriend = function(frinedId) {
     $scope.friend = userService.getUserById(frinedId);
     let url = `api/users/${$scope.friend._id}/messages`;
-    $http.get(url)
+    $http({
+      method: "GET",
+      headers: {
+        "authtoken": sessionService.getAuthToken()
+      },
+      url: url
+    })
       .then(response => {
-        userService.initMessage(response.data);
+        userService.initMessage(response.data, frinedId);
         $scope.allMessage = userService.getMessages();
+        $scope.messageCount[frinedId] = userService.getMessageCount(frinedId);
       })
       .catch(err => {
         console.log(err);
@@ -44,7 +57,14 @@ app.controller("chatController", function($scope, $rootScope, $http, $location, 
     let message = $scope.message;
     $scope.message = "";
     let url = `api/users/${$scope.friend._id}/messages`;
-    $http.post(url, JSON.stringify( { message } ))
+    $http({
+      method: "POST",
+      headers: {
+        "authToken": sessionService.getAuthToken()
+      },
+      url: url,
+      data: JSON.stringify( { message } )
+    })
       .then(response => {
         userService.pushMessage(response.data);
         $scope.allMessage = userService.getMessages();
