@@ -1,6 +1,8 @@
 app.factory("userService", function() {
   var obj = {};
   obj.messages = [];
+  obj.allUser = [];
+  obj.users = {};
 
   obj.setUser = function(user) {
     obj.currentUser = user;
@@ -18,6 +20,7 @@ app.factory("userService", function() {
     let userId = null;
     allUser.forEach( user => {
       userId = user._id;
+      user.messageCount = 0;
       obj.users[userId] = user;
     });
   };
@@ -30,8 +33,9 @@ app.factory("userService", function() {
     return obj.users[userId];
   }
 
-  obj.initMessage = function(messages){
+  obj.initMessage = function(messages, userId){
     obj.messages = messages;
+    obj.users[userId].messageCount = 0;
   }
   
   obj.pushMessage = function(newMessage){
@@ -40,6 +44,14 @@ app.factory("userService", function() {
 
   obj.getMessages = function(){
     return obj.messages;
+  }
+
+  obj.setMessageCount = function(userId){
+    obj.users[userId].messageCount++;
+  }
+
+  obj.getMessageCount = function(userId){
+    return obj.users[userId].messageCount;
   }
 
   return obj;
