@@ -1,4 +1,6 @@
 const db = require("../config/db");
+const jwt = require('jsonwebtoken');
+const secretKey = "chatappsecretkey";
 
 const userSchema = new db.Schema({
   name: String,
@@ -6,6 +8,12 @@ const userSchema = new db.Schema({
   password: String,
   socketId: String
 });
+
+userSchema.methods.getAuthToken = function() {
+  const payload = { _id: this._id };
+  const token = jwt.sign(payload, secretKey, { expiresIn: "1 hour" });
+  return token;
+};
 
 const User = new db.model("Users", userSchema);
 
@@ -47,9 +55,19 @@ async function findAllUser() {
   }
 }
 
+function verifyToken(token) {
+  try {
+    const verifiedUser = jwt.verify(token, secretKey);
+    return verifiedUser;
+  } catch (err) {
+    return null;
+  }
+}
+
 module.exports = {
   createUser,
   findUser,
   findAllUser,
-  login
+  login,
+  verifyToken
 };
