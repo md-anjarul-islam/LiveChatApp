@@ -1,0 +1,96 @@
+$font-stack: Helvetica, sans-serif;
+$primary-color: red;
+
+.chat-body{
+    display: flex;
+    height: 600px;
+    width: 600px;
+}
+
+.chat-left-bar{
+    width: 300px;
+    margin:10px;
+    padding:10px; 
+    background-color: lightblue;
+}
+
+.chat-user{
+    border-radius: 10px;
+    width: 100%;
+    background-color: blueviolet;   
+  }
+
+.chat-box{
+    width: 600px; margin:10px; padding:10px; background-color: lightblue;
+    h5{
+        text-align: center;
+    }
+}
+
+.chat-box-body{
+    background-color: whitesmoke;
+}
+
+.chat-box-own-message{
+    border-radius: 40px;
+    width: 300px;
+    height: 80px;
+    background:lightgreen;
+}
+
+.chat-box-friend-message{
+    border-radius: 40px;
+    width: 300px;
+    height: 80px;
+    background: lightcoral;
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .chat-body{
+        width: 400px; 
+        height: 400px;
+        margin:3px;
+        padding:3px;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .chat-body{
+        width: 450px;
+        height: 400px;
+        margin:3px;
+        padding:3px;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .chat-body{
+        width: 500px;
+        height: 420px;
+        margin:5px; 
+        padding:5px;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .chat-body{
+        width: 800px;
+        height: 500px;
+        margin:10px;
+        padding:10px;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .chat-body{
+        width: 800px;
+        height: 550px;
+        margin:10px;
+        padding:10px;
+    }
+}
