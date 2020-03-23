@@ -8,14 +8,14 @@
   width: 300px;
   margin: 10px;
   padding: 10px;
-  background-color: lightblue;
+  background-color: rgba(0, 0, 0, 0.03);
 }
 
-.chat-user{
+.chat-user {
   border-radius: 10px;
-  width: 100%;
-  background-color: blueviolet;   
+  background-color: lightcyan;
 }
+
 .chat-box {
   width: 600px;
   margin: 10px;
@@ -44,6 +44,18 @@
   background: lightcoral;
 }
 
+.message-box {
+  width: 75%;
+  border-radius: 10rem;
+  margin: 0.4rem;
+  padding: 0.2rem;
+}
+
+.message-send-button {
+  border-radius: 1rem;
+  font-size: 0.75rem;
+}
+
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
   .chat-body {
@@ -51,6 +63,18 @@
     height: 400px;
     margin: 3px;
     padding: 3px;
+  }
+
+  .chat-user {
+    font-size: xx-small;
+  }
+
+  .message-box {
+    width: 60%;
+    border-radius: 10rem;
+    margin: 0.4rem;
+    margin-right: 0.1rem;
+    padding: 0.2rem;
   }
 }
 /* Small devices (portrait tablets and large phones, 600px and up) */
@@ -61,6 +85,18 @@
     margin: 3px;
     padding: 3px;
   }
+
+  .chat-user {
+    font-size: xx-small;
+  }
+
+  .message-box {
+    width: 65%;
+    border-radius: 10rem;
+    margin: 0.4rem;
+    margin-right: 0.1rem;
+    padding: 0.2rem;
+  }
 }
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
@@ -69,6 +105,18 @@
     height: 420px;
     margin: 5px;
     padding: 5px;
+  }
+
+  .chat-user {
+    font-size: small;
+  }
+
+  .message-box {
+    width: 70%;
+    border-radius: 10rem;
+    margin: 0.4rem;
+    margin-right: 0.1rem;
+    padding: 0.2rem;
   }
 }
 /* Large devices (laptops/desktops, 992px and up) */
@@ -79,14 +127,30 @@
     margin: 10px;
     padding: 10px;
   }
+
+  .message-box {
+    width: 80%;
+    border-radius: 10rem;
+    margin: 0.4rem;
+    margin-right: 0.1rem;
+    padding: 0.2rem;
+  }
 }
 /* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) {
+@media only screen and (min-width: 1100px) {
   .chat-body {
     width: 800px;
     height: 550px;
     margin: 10px;
     padding: 10px;
+  }
+
+  .message-box {
+    width: 82%;
+    border-radius: 10rem;
+    margin: 0.4rem;
+    margin-right: 0.1rem;
+    padding: 0.2rem;
   }
 }
 

@@ -4,10 +4,10 @@
             <h5> Registered users </h5>
         </div>
 
-        <div class="card-body">
-            <ul class="list-group" style="background-color: lightgray;">
-                <li class="list-group-item" ng-repeat="user in allUser">
-                    <button class="btn chat-user" ng-click="selectFriend(user._id);">{{user.name}} <small style="color: red;" ng-show="messageCount[user._id]"> {{messageCount[user._id]}} </small>
+        <div class="card-body" style="background-color: rgba(0, 0, 0, 0.5);">
+            <ul class="list-group  chat-user" >
+                <li class="list-group-item" style="background-color: rgba(0, 0, 0, 0.1);" ng-repeat="user in allUser">
+                    <button class="btn btn-block" ng-click="selectFriend(user._id);">{{user.name}} <small style="color: red;" ng-show="messageCount[user._id]"> {{messageCount[user._id]}} </small>
                     </button>
                 </li>
             </ul>
@@ -42,9 +42,9 @@
             </ul>
         </div>
         <div class="card-footer">
-            <form ng-submit="sendMessage()">
-                <input type="text" class="shadow"  style="background-color: aliceblue; border-radius: 15px; padding: 8px;" placeholder="Write something..." ng-model="message">
-                <button type="submit" class="btn btn-primary" style="border-radius: 10px; ">Send</button>
+            <form ng-submit="sendMessage()" class="shadow-lg" style="background-color: rgba(0, 0, 0, 0.5);">
+                <input type="text" class="message-box" placeholder="Write something..." ng-model="message">
+                <button type="submit" class="btn btn-primary message-send-button">Send</button>
             </form>
         </div>
     </div>
