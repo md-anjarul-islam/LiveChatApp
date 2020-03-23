@@ -4,8 +4,8 @@
             <h5> Registered users </h5>
         </div>
 
-        <div class="card-body" style="background-color: rgba(0, 0, 0, 0.5);">
-            <ul class="list-group  chat-user" >
+        <div class="card-body chat-user">
+            <ul class="list-group" >
                 <li class="list-group-item" style="background-color: rgba(0, 0, 0, 0.1);" ng-repeat="user in allUser">
                     <button class="btn btn-block" ng-click="selectFriend(user._id);">{{user.name}} <small style="color: red;" ng-show="messageCount[user._id]"> {{messageCount[user._id]}} </small>
                     </button>
