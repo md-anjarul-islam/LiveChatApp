@@ -1,4 +1,4 @@
-app.controller("userController", function( $scope, $rootScope, $location, $http, $cookies, userService, sessionService) {
+app.controller("userController", function( $scope, $rootScope, $location, $http, AuthService, userService, sessionService) {
 
   var socket = $rootScope.socket;
   socket.on("updateUser", function(updatedUser) {
@@ -62,7 +62,8 @@ app.controller("userController", function( $scope, $rootScope, $location, $http,
           $rootScope.linkName1 = "Home";
           $rootScope.linkName2 = "Chat Room";
           $rootScope.linkName3 = "Log Out";
-          $location.path('/chatroom');
+          // $location.path('/chatroom');
+          AuthService.go("/chatroom");
         } else {
           $scope.errorMessage =
             "Some error occurred! the user might not found!";
