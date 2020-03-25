@@ -1,7 +1,20 @@
-app.factory('AuthService', function($http){
+app.factory('AuthService', function($location){
     var obj = {};
 
-    obj.login = function(credentials){
-        $http.post('api/login', credentials)
+    obj.memorizedRoute = null;
+
+    obj.memorize = function(route){
+        obj.memorizedRoute = route;
     }
+
+    obj.go = function (fallback){
+        let targetState = obj.memorizedRoute? obj.memorizedRoute : fallback;
+        $location.path(targetState);
+    }
+
+    obj.forget = function(){
+        obj.memorizedRoute = null;
+    }
+
+    return obj;
 })
