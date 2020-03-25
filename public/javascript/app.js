@@ -18,13 +18,19 @@ app.config( function($routeProvider){
         },
         '/chatroom': {
             templateUrl: 'views/chatView.html',
+            redirect: '/login',
             controller: 'chatController',
+            requireLogin: true
+        },
+        '/profile': {
+            template: '<h1> Profile Page </h1>',
+            redirect: '/login',
             requireLogin: true
         },
         '/logout': {
             template: '<h1>This is Logout page </h1>',
-            controller: 'userController',
-            requireLogin: false
+            requireLogin: true,
+            redirect: "/login"
         }
     };
     
@@ -36,16 +42,25 @@ app.config( function($routeProvider){
         redirectTo: '/',
         controller: 'userController'
     })
-}).run(function($http, $rootScope, sessionService){
-    $http.defaults.headers.common.authtoken = sessionService.getAuthToken();
+}).run(function($http, $rootScope, $location, sessionService, AuthService){    
     $rootScope.$on("$locationChangeStart", 
     function(event, next, current){
+       
+        if( !!sessionService.getAuthToken() ){
+            if(next.indexOf("login") != -1 || next.indexOf("register") != -1){
+                $location.path("/");
+                return;
+            }
+        }
+
         for(let route in window.routes){
             if(next.indexOf(route) !=-1 ){
-                if(window.routes[route].requireLogin && !sessionService.getAuthUser()){
-                    console.log("Requested for authorized route");
-                    event.preventDefault();
-                }
+                if(window.routes[route].requireLogin && !sessionService.getAuthToken()){
+                    AuthService.memorize(route);
+                    let nextPath = window.routes[route].redirect || "/login";
+                    $location.path(nextPath);
+                    break;
+                }                
             }
         }
         console.log("event triggered", next, current);
