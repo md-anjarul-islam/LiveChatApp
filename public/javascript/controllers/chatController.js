@@ -1,14 +1,23 @@
-app.controller("chatController", function($scope, $rootScope, $http, sessionService, userService) {
+app.controller("chatController", function(
+  $scope,
+  $rootScope,
+  $http,
+  sessionService,
+  userService
+) {
+
+  console.log("loading chatController");
+
   var socket = $rootScope.socket;
   $scope.messageCount = {};
-  
+
   socket.on("updateMessage", function(updatedMessage) {
     console.log("updatedMessage", updatedMessage);
     $scope.$apply(function() {
-      if($scope.friend && $scope.friend._id == updatedMessage.fromUserId){
+      if ($scope.friend && $scope.friend._id == updatedMessage.fromUserId) {
         userService.pushMessage(updatedMessage);
         $scope.allMessage = userService.getMessages();
-      } else{
+      } else {
         userService.setMessageCount(updatedMessage.fromUserId);
         $scope.messageCount[updatedMessage.fromUserId] = userService.getMessageCount(updatedMessage.fromUserId);
       }
@@ -25,12 +34,44 @@ app.controller("chatController", function($scope, $rootScope, $http, sessionServ
     });
   });
 
-  $scope.findName = function(userId){
-    if(userId == userService.currentUser._id)
-      return "You";
-    else
-      return $scope.friend.name;
-  }
+  $scope.init = async function() {
+    console.log("Initializing chatcontroller");
+    let request = {
+      method: "GET",
+      url: "api/users/profile",
+      headers: {
+        authtoken: sessionService.getAuthToken()
+      }
+    };
+
+    try {
+      let response = await $http(request);
+      sessionService.createSession(response.data);
+      $rootScope.currentUser = response.data.name;
+
+      request = {
+        method: "GET",
+        url: "api/users",
+        headers: {
+          authtoken: sessionService.getAuthToken()
+        }
+      };
+      response = await $http(request);
+      console.log($scope.allUser);
+      userService.setAllUser(response.data);
+      $scope.allUser = userService.getAllUser();
+      console.log($scope.allUser);
+    } catch (err) {
+      sessionService.clearAuthToken();
+      sessionService.clearSession();
+      console.log(err);
+    }
+  };
+
+  $scope.findName = function(userId) {
+    if (userId == userService.currentUser._id) return "You";
+    else return $scope.friend.name;
+  };
 
   $scope.selectFriend = function(frinedId) {
     $scope.friend = userService.getUserById(frinedId);
@@ -38,7 +79,7 @@ app.controller("chatController", function($scope, $rootScope, $http, sessionServ
     $http({
       method: "GET",
       headers: {
-        "authtoken": sessionService.getAuthToken()
+        authtoken: sessionService.getAuthToken()
       },
       url: url
     })
@@ -60,10 +101,10 @@ app.controller("chatController", function($scope, $rootScope, $http, sessionServ
     $http({
       method: "POST",
       headers: {
-        "authToken": sessionService.getAuthToken()
+        authToken: sessionService.getAuthToken()
       },
       url: url,
-      data: JSON.stringify( { message } )
+      data: JSON.stringify({ message })
     })
       .then(response => {
         userService.pushMessage(response.data);
