@@ -12,32 +12,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/api/users/:userId/messages", authProvider, async (req, res) => {
-  let id1 = req.headers.user._id;
-  let id2 = req.params.userId;
-  try{
-    const messages = await messageHandler.getMessage(id1, id2);
-    res.json(messages);
-  }catch(err){
-    res.json({message: "Error!"});
-  }
-});
-
-app.post("/api/users/:userId/messages", authProvider, async (req, res) => {
-  let newMessage = req.body.message;
-  let id1 = req.headers.user._id;
-  let id2 = req.params.userId;
-
-  try{
-    newMessage = await messageHandler.createMessage(id1, id2, newMessage);
-    user2 = await userHandler.findUser({_id: id2});
-    io.to(user2.socketId).emit("updateMessage", newMessage);
-    res.json(newMessage);
-  }catch(err){
-    res.json({message: "Error!"});
-  }
-});
-
 app.post("/api/register", async function(req, res) {
   let newUser = await userHandler.createUser(req.body.user, req.body.socketId);
   let allUser = await userHandler.findAllUser();
@@ -66,10 +40,50 @@ app.post("/api/login", async function(req, res) {
   }
 });
 
-app.get("api/users", async function(req, res) {
+app.get("/api/users", async function(req, res) {
   let allUser = await userHandler.findAllUser();
   res.json(allUser);
 });
+
+app.get("/api/users/profile", authProvider, async function(req, res){
+  let user = req.headers.user;
+  try{
+    profile = await userHandler.findUser({_id: user._id});
+    res.json(profile);
+  }catch(err){
+    res.status(404).json({message: "Unauthorized Access!"})
+  }
+});
+
+
+
+
+app.get("/api/users/:userId/messages", authProvider, async (req, res) => {
+  let id1 = req.headers.user._id;
+  let id2 = req.params.userId;
+  try{
+    const messages = await messageHandler.getMessage(id1, id2);
+    res.json(messages);
+  }catch(err){
+    res.json({message: "Error!"});
+  }
+});
+
+app.post("/api/users/:userId/messages", authProvider, async (req, res) => {
+  let newMessage = req.body.message;
+  let id1 = req.headers.user._id;
+  let id2 = req.params.userId;
+
+  try{
+    newMessage = await messageHandler.createMessage(id1, id2, newMessage);
+    user2 = await userHandler.findUser({_id: id2});
+    io.to(user2.socketId).emit("updateMessage", newMessage);
+    res.json(newMessage);
+  }catch(err){
+    res.json({message: "Error!"});
+  }
+});
+
 
 io.on("connection", socket => {
   console.log("a user connected", socket.id);
