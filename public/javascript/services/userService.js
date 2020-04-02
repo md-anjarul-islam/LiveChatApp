@@ -2,7 +2,7 @@ app.factory("userService", function() {
   var obj = {};
   obj.messages = [];
   obj.allUser = [];
-  obj.users = {};
+  obj.users = new Map();
 
   obj.setUser = function(user) {
     obj.currentUser = user;
@@ -14,14 +14,10 @@ app.factory("userService", function() {
 
   obj.setAllUser = function(allUser) {
     obj.allUser = allUser;
-    obj.users = {};
-    // obj.allUser is also an object which is a key-value pair.
-    // the key here is the userId and the value is the user itself
-    let userId = null;
+    
     allUser.forEach( user => {
-      userId = user._id;
       user.messageCount = 0;
-      obj.users[userId] = user;
+      obj.users.set(user._id, user)
     });
   };
 
@@ -30,12 +26,12 @@ app.factory("userService", function() {
   };
 
   obj.getUserById = function(userId){
-    return obj.users[userId];
+    return obj.users.get(userId);
   }
 
   obj.initMessage = function(messages, userId){
     obj.messages = messages;
-    obj.users[userId].messageCount = 0;
+    obj.users.get(userId).messageCount = 0;
   }
   
   obj.pushMessage = function(newMessage){
@@ -47,11 +43,11 @@ app.factory("userService", function() {
   }
 
   obj.setMessageCount = function(userId){
-    obj.users[userId].messageCount++;
+    obj.users.get(userId).messageCount++;
   }
 
   obj.getMessageCount = function(userId){
-    return obj.users[userId].messageCount;
+    return obj.users.get(userId).messageCount;
   }
 
   return obj;
