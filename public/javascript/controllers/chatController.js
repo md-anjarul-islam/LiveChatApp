@@ -7,7 +7,7 @@ app.controller("chatController", function(
 ) {
 
   console.log("loading chatController");
-
+    
   var socket = $rootScope.socket;
   $scope.messageCount = {};
 
@@ -38,7 +38,7 @@ app.controller("chatController", function(
     console.log("Initializing chatcontroller");
     let request = {
       method: "GET",
-      url: "api/users/profile",
+      url: "api/users/",
       headers: {
         authtoken: sessionService.getAuthToken()
       }
@@ -47,7 +47,10 @@ app.controller("chatController", function(
     try {
       let response = await $http(request);
       sessionService.createSession(response.data);
-      $rootScope.currentUser = response.data.name;
+      $scope.$apply(function(){
+        $rootScope.currentUser = response.data.name;
+        userService.setUser(response.data);
+      })
 
       request = {
         method: "GET",
@@ -59,13 +62,32 @@ app.controller("chatController", function(
       response = await $http(request);
       console.log($scope.allUser);
       userService.setAllUser(response.data);
-      $scope.allUser = userService.getAllUser();
-      console.log($scope.allUser);
+      $scope.$apply(function(){
+        $scope.allUser = userService.getAllUser();
+        console.log($scope.allUser);
+      })
     } catch (err) {
       sessionService.clearAuthToken();
       sessionService.clearSession();
       console.log(err);
     }
+    $scope.$apply(function(){
+      if(userService.getUser()){
+        $rootScope.link1 = "#!/";
+        $rootScope.link2 = "#!/chatroom";
+        $rootScope.link3 = "#!/logout";
+        $rootScope.linkName1 = "Home";
+      $rootScope.linkName2 = "Chat Room";
+      $rootScope.linkName3 = "Log Out";
+    }else{
+      $rootScope.link1 = "#!/";
+      $rootScope.link2 = "#!/login";
+      $rootScope.link3 = "#!/register";
+      $rootScope.linkName1 = "Home";
+      $rootScope.linkName2 = "Login";
+      $rootScope.linkName3 = "Register";
+    }
+  })
   };
 
   $scope.findName = function(userId) {
@@ -75,7 +97,7 @@ app.controller("chatController", function(
 
   $scope.selectFriend = function(frinedId) {
     $scope.friend = userService.getUserById(frinedId);
-    let url = `api/users/${$scope.friend._id}/messages`;
+    let url = `api/messages/${$scope.friend._id}`;
     $http({
       method: "GET",
       headers: {
@@ -97,7 +119,7 @@ app.controller("chatController", function(
   $scope.sendMessage = function() {
     let message = $scope.message;
     $scope.message = "";
-    let url = `api/users/${$scope.friend._id}/messages`;
+    let url = `api/messages/${$scope.friend._id}`;
     $http({
       method: "POST",
       headers: {
