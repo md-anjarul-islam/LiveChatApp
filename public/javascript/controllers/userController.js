@@ -1,6 +1,8 @@
 app.controller("userController", function( $scope, $rootScope, $location, $http, AuthService, userService, sessionService) {
 
   var socket = $rootScope.socket;
+  $rootScope.init();
+
   socket.on("updateUser", function(updatedUser) {
     $scope.$apply(function() {
       userService.setAllUser(updatedUser);
@@ -56,13 +58,7 @@ app.controller("userController", function( $scope, $rootScope, $location, $http,
           sessionService.createSession(response.data);
           sessionService.setAuthToken(response.headers()["x-token"]);
           $rootScope.currentUser = userService.getUser().name;
-          /* $rootScope.link1 = "#!/";
-          $rootScope.link2 = "#!/chatroom";
-          $rootScope.link3 = "#!/logout";
-          $rootScope.linkName1 = "Home";
-          $rootScope.linkName2 = "Chat Room";
-          $rootScope.linkName3 = "Log Out";
-           */// $location.path('/chatroom');
+          $rootScope.userLoggedIn = true;
           AuthService.go("/chatroom");
         } else {
           $scope.errorMessage =
@@ -73,19 +69,4 @@ app.controller("userController", function( $scope, $rootScope, $location, $http,
         $scope.errorMessage = "Unauthorized access!";
       });
   };
-  if(userService.getUser()){
-    $rootScope.link1 = "#!/";
-    $rootScope.link2 = "#!/chatroom";
-    $rootScope.link3 = "#!/logout";
-    $rootScope.linkName1 = "Home";
-    $rootScope.linkName2 = "Chat Room";
-    $rootScope.linkName3 = "Log Out";
-  }else{
-    $rootScope.link1 = "#!/";
-    $rootScope.link2 = "#!/login";
-    $rootScope.link3 = "#!/register";
-    $rootScope.linkName1 = "Home";
-    $rootScope.linkName2 = "Login";
-    $rootScope.linkName3 = "Register";
-  }
 });
