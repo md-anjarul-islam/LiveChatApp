@@ -2,12 +2,11 @@ app.controller("chatController", function(
   $scope,
   $rootScope,
   $http,
+  $location,
   sessionService,
   userService
 ) {
-
-  console.log("loading chatController");
-    
+  
   var socket = $rootScope.socket;
   $scope.messageCount = {};
 
@@ -35,7 +34,7 @@ app.controller("chatController", function(
   });
 
   $scope.init = async function() {
-    console.log("Initializing chatcontroller");
+    $rootScope.init();
     let request = {
       method: "GET",
       url: "api/users/",
@@ -49,6 +48,7 @@ app.controller("chatController", function(
       sessionService.createSession(response.data);
       $scope.$apply(function(){
         $rootScope.currentUser = response.data.name;
+        $rootScope.userLoggedIn = true;
         userService.setUser(response.data);
       })
 
@@ -71,23 +71,6 @@ app.controller("chatController", function(
       sessionService.clearSession();
       console.log(err);
     }
-    $scope.$apply(function(){
-      if(userService.getUser()){
-        $rootScope.link1 = "#!/";
-        $rootScope.link2 = "#!/chatroom";
-        $rootScope.link3 = "#!/logout";
-        $rootScope.linkName1 = "Home";
-      $rootScope.linkName2 = "Chat Room";
-      $rootScope.linkName3 = "Log Out";
-    }else{
-      $rootScope.link1 = "#!/";
-      $rootScope.link2 = "#!/login";
-      $rootScope.link3 = "#!/register";
-      $rootScope.linkName1 = "Home";
-      $rootScope.linkName2 = "Login";
-      $rootScope.linkName3 = "Register";
-    }
-  })
   };
 
   $scope.findName = function(userId) {
@@ -118,6 +101,8 @@ app.controller("chatController", function(
 
   $scope.sendMessage = function() {
     let message = $scope.message;
+    if( !message )
+      return;
     $scope.message = "";
     let url = `api/messages/${$scope.friend._id}`;
     $http({
