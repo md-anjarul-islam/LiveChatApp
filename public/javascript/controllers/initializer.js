@@ -1,14 +1,17 @@
-app.controller('initializer', function($scope, $rootScope, sessionService){
-    $scope.init = function(){
+app.controller('initializer', function($scope, $rootScope, $location, sessionService){
+    $rootScope.init = function(){
         $rootScope.socket = io();
-        if(sessionService.getAuthUser())
+        if(sessionService.getAuthUser()){
+            $rootScope.userLoggedIn = true;
             $rootScope.currentUser = sessionService.getAuthUser().name;
-        $rootScope.link1 = "#!/";
-        $rootScope.link2 = "#!/login";
-        $rootScope.link3 = "#!/register";
-        
-        $rootScope.linkName1 = "Home";
-        $rootScope.linkName2 = "Login";
-        $rootScope.linkName3 = "Register";
+        } else{
+            $rootScope.userLoggedIn = false;
+        }
     }
+    $rootScope.logout = function(){
+        sessionService.clearSession();
+        sessionService.clearAuthToken();
+        $rootScope.userLoggedIn = false;
+        $location.path("/");
+      }
 })
